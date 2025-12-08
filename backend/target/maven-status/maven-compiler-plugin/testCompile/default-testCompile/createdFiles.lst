@@ -1,0 +1,4 @@
+com/codecomand/hmcts_app/HmctsAppApplicationTests.class
+com/codecomand/hmcts_app/task/TaskMapperTest.class
+com/codecomand/hmcts_app/task/TaskControllerTest.class
+com/codecomand/hmcts_app/task/TaskServiceTest.class

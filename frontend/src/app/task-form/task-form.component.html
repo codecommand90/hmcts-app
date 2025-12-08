@@ -1,0 +1,91 @@
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="title">
+      Title <span class="required">*</span>
+    </label>
+    <input
+      type="text"
+      id="title"
+      formControlName="title"
+      [class.error]="title?.invalid && title?.touched"
+      placeholder="Enter task title"
+    />
+    <div *ngIf="title?.invalid && title?.touched" class="error-message">
+      <div *ngIf="title?.errors?.['required']">Title is required</div>
+      <div *ngIf="title?.errors?.['maxlength']">Title must be less than 200 characters</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      placeholder="Enter task description (optional)"
+    ></textarea>
+    <div *ngIf="description?.invalid && description?.touched" class="error-message">
+      <div *ngIf="description?.errors?.['maxlength']">Description must be less than 1000 characters</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="status">
+      Status <span class="required">*</span>
+    </label>
+    <select
+      id="status"
+      formControlName="status"
+      [class.error]="status?.invalid && status?.touched"
+    >
+      <option value="">Select status</option>
+      <option *ngFor="let taskStatus of taskStatuses" [value]="taskStatus">
+        {{ taskStatus.replace('_', ' ') }}
+      </option>
+    </select>
+    <div *ngIf="status?.invalid && status?.touched" class="error-message">
+      Status is required
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="dueDateTime">
+      Due Date/Time <span class="required">*</span>
+    </label>
+    <input
+      type="datetime-local"
+      id="dueDateTime"
+      formControlName="dueDateTime"
+      [class.error]="dueDateTime?.invalid && dueDateTime?.touched"
+    />
+    <div *ngIf="dueDateTime?.invalid && dueDateTime?.touched" class="error-message">
+      Due date/time is required
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message" style="margin-bottom: 20px; padding: 10px; background: #f8d7da; border-radius: 6px;">
+    {{ errorMessage }}
+  </div>
+
+  <button type="submit" [disabled]="isSubmitting">
+    {{ isSubmitting ? 'Creating...' : 'Create Task' }}
+  </button>
+</form>
+
+<div *ngIf="successMessage" class="success-message">
+  {{ successMessage }}
+</div>
+
+<div *ngIf="createdTask" class="task-details">
+  <h3>Created Task Details</h3>
+  <p><strong>ID:</strong> {{ createdTask.id }}</p>
+  <p><strong>Title:</strong> {{ createdTask.title }}</p>
+  <p *ngIf="createdTask.description"><strong>Description:</strong> {{ createdTask.description }}</p>
+  <p><strong>Status:</strong> 
+    <span [class]="'status-badge ' + getStatusClass(createdTask.status)">
+      {{ createdTask.status.replace('_', ' ') }}
+    </span>
+  </p>
+  <p><strong>Due Date/Time:</strong> {{ formatDate(createdTask.dueDateTime) }}</p>
+  <p><strong>Created At:</strong> {{ formatDate(createdTask.createdAt) }}</p>
+</div>
+
